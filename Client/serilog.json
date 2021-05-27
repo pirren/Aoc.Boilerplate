@@ -1,0 +1,113 @@
+﻿{
+  "Serilog": {
+    "MinimumLevel": {
+      "Default": "Verbose",
+      "Override": {
+        "Microsoft": "Information",
+        "Microsoft.AspNetCore": "Warning",
+        "Microsoft.Hosting.Lifetime": "Information",
+        "Microsoft.EntityFrameworkCore.Database.Command": "Warning"
+      }
+    },
+    "WriteTo": [
+      {
+        "Name": "Logger",
+        "Args": {
+          "configureLogger": {
+            "WriteTo": [
+              {
+                "Name": "Async",
+                "Args": {
+                  "configure": [
+                    {
+                      "Name": "Console",
+                      "Args": {
+                        "outputTemplate": "{Timestamp:HH:mm:ss.fff} [{Level:u3}] [{SourceContext}] {Message:lj}{NewLine}{Exception}"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "Filter": [
+              {
+                "Name": "ByExcluding",
+                "Args": {
+                  "expression": "Telegram is not null"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "Name": "Logger",
+        "Args": {
+          "configureLogger": {
+            "WriteTo": [
+              {
+                "Name": "Async",
+                "Args": {
+                  "configure": [
+                    {
+                      "Name": "File",
+                      "Args": {
+                        "path": "Logs//log_.log",
+                        "RollingInterval": "Day",
+                        "fileSizeLimitBytes": 200000000,
+                        "rollOnFileSizeLimit": true,
+                        "outputTemplate": "{Timestamp:HH:mm:ss.fff zzz} [{Level:u3}] [{SourceContext}] {Message:lj}{NewLine}{Exception}"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "Filter": [
+              {
+                "Name": "ByExcluding",
+                "Args": {
+                  "expression": "Telegram is not null"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "Name": "Logger",
+        "Args": {
+          "configureLogger": {
+            "WriteTo": [
+              {
+                "Name": "Async",
+                "Args": {
+                  "configure": [
+                    {
+                      "Name": "File",
+                      "Args": {
+                        "path": "Logs//Trace//log_.log",
+                        "RollingInterval": "Day",
+                        "fileSizeLimitBytes": 200000000,
+                        "rollOnFileSizeLimit": true,
+                        "outputTemplate": "{Timestamp:HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "Filter": [
+              {
+                "Name": "ByIncludingOnly",
+                "Args": {
+                  "expression": "Telegram is not null"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

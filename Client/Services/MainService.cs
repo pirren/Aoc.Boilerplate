@@ -1,9 +1,10 @@
 ﻿using Aoc2020.Lib.Workers;
+using Serilog;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Aoc2020.Services
+namespace Aoc2020.Client.Services
 {
     public class MainService : WorkerBase
     {

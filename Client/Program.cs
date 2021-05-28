@@ -39,7 +39,6 @@ namespace Aoc2020.Client
             .AddJsonFile("serilog.Development.json", optional: true, reloadOnChange: true)
             .Build();
 
-
         public static IHostBuilder CreateHostBuilder(string[] args)
         => Host.CreateDefaultBuilder(args)
         .ConfigureAppConfiguration((hostCtx, config) =>

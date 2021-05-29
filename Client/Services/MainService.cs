@@ -1,6 +1,11 @@
-﻿using Aoc2020.Lib.Workers;
+﻿using Aoc2020.Lib.Config;
+using Aoc2020.Lib.Utils;
+using Aoc2020.Lib.Workers;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System;
+using System.IO;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -8,16 +13,38 @@ namespace Aoc2020.Client.Services
 {
     public class MainService : WorkerBase
     {
-        //private readonly ILogger<MainService> _log;
+        private const string solutionTemplate = @"            using Aoc2020.Client.Services;
+            using Microsoft.Extensions.Configuration;
+            using Microsoft.Extensions.DependencyInjection;
+            using Microsoft.Extensions.Hosting;
+            using Serilog;
+            using System;
+            using System.IO;
+            ";
 
-        public MainService()
+        private readonly IServiceScopeFactory scopeFactory;
+
+        public MainService(IServiceScopeFactory scopeFactory)
         {
-
+            this.scopeFactory = scopeFactory;
         }
 
         protected override async Task RunAsync(CancellationToken cancellationToken)
         {
-            Console.WriteLine("RunAsync from MainService");
+            using var scope = scopeFactory.CreateScope();
+
+
+            var solutionUtils = scope.ServiceProvider.GetRequiredService<SolutionUtils>();
+            var config = scope.ServiceProvider.GetRequiredService<SystemConfig>();
+
+
+            Console.WriteLine("Aoc{0}", config.AocVersion);
+
+            //var result = solutionUtils.BuildSolution(day);
+            //if (result.IsSuccess) Console.WriteLine("Solution for day {0} successfully created", day);
+            //else Console.WriteLine("Could not create solution: {0}", result.Error);
+
+            //Console.WriteLine("RunAsync from MainService");
         }
 
         protected override async Task RunningAsync(CancellationToken cancellationToken)

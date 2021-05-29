@@ -1,4 +1,6 @@
 ﻿using Aoc2020.Client.Services;
+using Aoc2020.Lib.Config;
+using Aoc2020.Lib.Utils;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -45,10 +47,11 @@ namespace Aoc2020.Client
         {
             config.SetBasePath(Directory.GetCurrentDirectory());
             config.AddJsonFile("appsettings.Development.json", true);
-            config.AddCommandLine(args);
         })
         .ConfigureServices((hostCtx, services) =>
         {
+            services.AddSingleton<SystemConfig>();
+            services.AddSingleton<SolutionUtils>();
             services.AddSingleton(_ => hostCtx.Configuration);
             services.AddHostedService<MainService>();
         })

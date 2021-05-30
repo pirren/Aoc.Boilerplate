@@ -1,6 +1,6 @@
-﻿using Aoc2020.Client.Services;
-using Aoc2020.Lib.Config;
-using Aoc2020.Lib.Utils;
+﻿using Aoc.Client.Services;
+using Aoc.Lib;
+using Aoc.Lib.Utils;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -8,7 +8,7 @@ using Serilog;
 using System;
 using System.IO;
 
-namespace Aoc2020.Client
+namespace Aoc.Client
 {
     class Program
     {

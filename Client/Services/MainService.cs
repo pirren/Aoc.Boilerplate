@@ -1,15 +1,12 @@
-﻿using Aoc2020.Lib.Config;
-using Aoc2020.Lib.Utils;
-using Aoc2020.Lib.Workers;
+﻿using Aoc.Lib;
+using Aoc.Lib.Utils;
+using Aoc.Lib.Workers;
 using Microsoft.Extensions.DependencyInjection;
-using Serilog;
 using System;
-using System.IO;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Aoc2020.Client.Services
+namespace Aoc.Client.Services
 {
     public class MainService : WorkerBase
     {

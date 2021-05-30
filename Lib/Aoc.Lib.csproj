@@ -2,10 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <AssemblyName>Aoc.Lib</AssemblyName>
+    <RootNamespace>Aoc.Lib</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <Folder Include="Interfaces\" />
+    <Folder Include="Utils\Extensions\" />
   </ItemGroup>
 
   <ItemGroup>

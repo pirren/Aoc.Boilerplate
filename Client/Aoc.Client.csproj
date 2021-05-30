@@ -3,6 +3,8 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
+    <AssemblyName>Aoc.Client</AssemblyName>
+    <RootNamespace>Aoc.Client</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Lib\Aoc2020.Lib.csproj" />
+    <ProjectReference Include="..\Lib\Aoc.Lib.csproj" />
   </ItemGroup>
 
   <ItemGroup>

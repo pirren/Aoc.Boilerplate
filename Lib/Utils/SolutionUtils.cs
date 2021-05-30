@@ -1,24 +1,26 @@
-﻿using Aoc2020.Lib.Communication;
+﻿using Aoc.Lib.Communication;
+using Microsoft.Extensions.Configuration;
 using System.IO;
 using System.Text;
 
-namespace Aoc2020.Lib.Utils
+namespace Aoc.Lib.Utils
 {
     public class SolutionUtils
     {
-        private const string solutionBasePath = @"..\..\..\Solutions";
+        private readonly SystemConfig config;
 
-        public SolutionUtils()
+        public SolutionUtils(SystemConfig configuration)
         {
-            Directory.CreateDirectory(solutionBasePath); // base path should always exist
+            this.config = configuration;
+            Directory.CreateDirectory(config.SolutionBasePath); // base path should always exist
         }
 
         public Result BuildSolution(int day)
         {
-            if (SolutionExists(day).IsSuccess) return Result.Fail("Solution already exists");
+            var eval = EvaluateBuildRequest(day);
+            if (eval.IsFailure) return eval;
 
             var solutionFolderUrl = GetSolutionFolderUrl(day);
-            var solutionFileName = GetSolutionFileName(day);
             var fullUrl = GetSolutionUrl(day);
 
             Directory.CreateDirectory(solutionFolderUrl);
@@ -27,6 +29,15 @@ namespace Aoc2020.Lib.Utils
 
             //todo: Add filecontent here
 
+            return Result.Ok(fullUrl);
+        }
+
+        private Result EvaluateBuildRequest(int day)
+        {
+            if (day < 1 || day > 24) 
+                return Result.Fail(string.Format("Valid Solutions are 1-24. Entered: {0}", day));
+            if (SolutionExists(day).IsSuccess) 
+                return Result.Fail("Solution already exists");
             return Result.Ok();
         }
 
@@ -52,15 +63,15 @@ namespace Aoc2020.Lib.Utils
 
         private string GetSolutionFolderUrl(int day)
         {
-            return Path.Combine(solutionBasePath, GetSolutionShortName(day));
+            return Path.Combine(config.SolutionBasePath, GetSolutionShortName(day));
         }
 
-        private string GetSolutionUrl(int day)
+        public string GetSolutionUrl(int day)
         {
-            return Path.Combine(solutionBasePath, GetSolutionFolderName(day), GetSolutionFileName(day));
+            return Path.Combine(config.SolutionBasePath, GetSolutionFolderName(day), GetSolutionFileName(day));
         }
 
-        private static string SolutionPrintableNumbers(int day) 
+        private string SolutionPrintableNumbers(int day) 
             => day > 9 ? day.ToString() : new StringBuilder().Append('0').Append(day).ToString();
     }
 }

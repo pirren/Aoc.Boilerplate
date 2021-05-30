@@ -1,4 +1,4 @@
-﻿namespace Aoc2020.Lib.Communication
+﻿namespace Aoc.Lib.Communication
 {
     public class Result
     {

@@ -3,7 +3,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Aoc2020.Lib.Workers
+namespace Aoc.Lib.Workers
 {
     public abstract class WorkerBase : BackgroundService
     {

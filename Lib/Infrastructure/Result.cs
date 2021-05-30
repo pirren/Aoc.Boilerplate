@@ -1,4 +1,4 @@
-﻿namespace Aoc.Lib.Communication
+﻿namespace Aoc.Lib.Infrastructure
 {
     public class Result
     {

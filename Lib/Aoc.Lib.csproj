@@ -7,8 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\" />
-    <Folder Include="Utils\Extensions\" />
+    <Compile Remove="Utils\Extensions\**" />
+    <EmbeddedResource Remove="Utils\Extensions\**" />
+    <None Remove="Utils\Extensions\**" />
   </ItemGroup>
 
   <ItemGroup>

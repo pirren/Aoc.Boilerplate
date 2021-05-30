@@ -31,6 +31,6 @@ namespace Aoc.Lib.Workers
         protected abstract Task RunAsync(CancellationToken cancellationToken);
 
         public override async Task StopAsync(CancellationToken cancellationToken)
-            => await Task.WhenAny(ExecutingTask, Task.Delay(TimeSpan.FromMilliseconds(3000), cancellationToken));
+            => await Task.WhenAny(ExecutingTask, Task.Delay(TimeSpan.FromMilliseconds(50), cancellationToken));
     }
 }

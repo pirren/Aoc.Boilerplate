@@ -1,6 +1,11 @@
-﻿using Aoc.Lib.Communication;
+﻿using Aoc.Lib.Infrastructure;
+using Aoc.Lib.Extensions;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace Aoc.Lib.Utils
@@ -8,20 +13,32 @@ namespace Aoc.Lib.Utils
     public class SolutionUtils
     {
         private readonly SystemConfig config;
+        private readonly string solutionsNamespace = "Aoc.Client.Solutions";
 
         public SolutionUtils(SystemConfig configuration)
         {
             this.config = configuration;
-            Directory.CreateDirectory(config.SolutionBasePath); // base path should always exist
+            Directory.CreateDirectory(config.SolutionsBasePath); // base path should always exist
         }
 
-        public Result BuildSolution(int day)
+        public List<Type> GetSolutions()
         {
-            var eval = EvaluateBuildRequest(day);
+            Assembly asm = Assembly.GetExecutingAssembly();
+
+            var foo = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(t => t.GetTypes())
+                .Where(t => t.IsClass && t.Namespace == solutionsNamespace);
+
+            return foo.ToList();
+        }
+
+        public Result GenerateTemplate(int day)
+        {
+            var eval = EvaluateGenerationRequest(day);
             if (eval.IsFailure) return eval;
 
-            var solutionFolderUrl = GetSolutionFolderUrl(day);
-            var fullUrl = GetSolutionUrl(day);
+            var solutionFolderUrl = GetTemplateFolderUrl(day);
+            var fullUrl = GetTemplateUrl(day);
 
             Directory.CreateDirectory(solutionFolderUrl);
 
@@ -32,46 +49,43 @@ namespace Aoc.Lib.Utils
             return Result.Ok(fullUrl);
         }
 
-        private Result EvaluateBuildRequest(int day)
+        private Result EvaluateGenerationRequest(int day)
         {
             if (day < 1 || day > 24) 
                 return Result.Fail(string.Format("Valid Solutions are 1-24. Entered: {0}", day));
-            if (SolutionExists(day).IsSuccess) 
+            if (TemplateExists(day).IsSuccess) 
                 return Result.Fail("Solution already exists");
             return Result.Ok();
         }
 
-        public Result SolutionExists(int day)
+        public Result TemplateExists(int day)
         {
-            return File.Exists(GetSolutionUrl(day)) ? Result.Ok() : Result.Fail("Solution does not exist");
+            return File.Exists(GetTemplateUrl(day)) ? Result.Ok() : Result.Fail("Solution does not exist");
         }
 
-        private string GetSolutionShortName(int day)
+        private string GetTemplateShortName(int day)
         {
-            return new StringBuilder().Append("Day").Append(SolutionPrintableNumbers(day)).ToString();
+            return new StringBuilder().Append("Day").Append(day.TemplateNumberToPrint()).ToString();
         }
 
-        private string GetSolutionFileName(int day)
+        private string GetTemplateFileName(int day)
         {
-            return new StringBuilder().Append(GetSolutionShortName(day)).Append(".cs").ToString();
+            return new StringBuilder().Append(GetTemplateShortName(day)).Append(".cs").ToString();
         }
 
-        private string GetSolutionFolderName(int day)
+        private string GetSolutionTemplateFolderName(int day)
         {
-            return GetSolutionShortName(day);
+            return GetTemplateShortName(day);
         }
 
-        private string GetSolutionFolderUrl(int day)
+        private string GetTemplateFolderUrl(int day)
         {
-            return Path.Combine(config.SolutionBasePath, GetSolutionShortName(day));
+            return Path.Combine(config.SolutionsBasePath, GetTemplateShortName(day));
         }
 
-        public string GetSolutionUrl(int day)
+        public string GetTemplateUrl(int day)
         {
-            return Path.Combine(config.SolutionBasePath, GetSolutionFolderName(day), GetSolutionFileName(day));
+            return Path.Combine(config.SolutionsBasePath, GetSolutionTemplateFolderName(day), GetTemplateFileName(day));
         }
-
-        private string SolutionPrintableNumbers(int day) 
-            => day > 9 ? day.ToString() : new StringBuilder().Append('0').Append(day).ToString();
     }
 }

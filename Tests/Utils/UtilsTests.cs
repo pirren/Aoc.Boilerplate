@@ -1,5 +1,5 @@
+using Aoc.Lib;
 using Aoc.Lib.Utils;
-using System;
 using System.IO;
 using Xunit;
 
@@ -15,19 +15,19 @@ namespace Aoc.Tests.Utils
 
         #region SolutionUtils
         [Fact]
-        public void BuildSolution_SolutionExistsReturnsFails()
+        public void GenerateTemplate_SolutionExistsReturnsFails()
         {
-            SolutionUtils utils = new SolutionUtils(new Lib.SystemConfig(fixture.TestDataFolder));
-            Assert.True(utils.BuildSolution(1).IsFailure);
+            SolutionUtils utils = new(new SystemConfig(fixture.TestDataFolder));
+            Assert.True(utils.GenerateTemplate(1).IsFailure);
         }
 
         [Fact]
-        public void BuildSolution_BuiltSolutionReturnsSuccess()
+        public void GenerateTemplate_BuiltSolutionReturnsSuccess()
         {
-            SolutionUtils utils = new SolutionUtils(new Lib.SystemConfig(fixture.TestDataFolder));
+            SolutionUtils utils = new(new SystemConfig(fixture.TestDataFolder));
             int nonExistingDay = 2;
-            Assert.True(utils.BuildSolution(nonExistingDay).IsSuccess);
-            File.Delete(utils.GetSolutionUrl(nonExistingDay));
+            Assert.True(utils.GenerateTemplate(nonExistingDay).IsSuccess);
+            File.Delete(utils.GetTemplateUrl(nonExistingDay));
         }
         #endregion
     }

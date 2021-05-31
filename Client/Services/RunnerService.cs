@@ -1,5 +1,4 @@
-﻿using Aoc.Client.Solutions;
-using Aoc.Lib;
+﻿using Aoc.Lib;
 using Aoc.Lib.Extensions;
 using Aoc.Lib.Interfaces;
 using Aoc.Lib.Utils;
@@ -8,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System;
 using System.Linq;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -57,11 +55,12 @@ namespace Aoc.Client.Services
 
         protected override async Task RunningAsync(CancellationToken cancellationToken)
         {
-            await Task.Factory.StartNew(async () => {
+            await Task.Factory.StartNew(async () =>
+            {
                 Thread.Sleep(300); // wait for host to finish
                 Log.Information("Starting RunnerService");
                 Console.Write('\n');
-                await RunAsync(cancellationToken); 
+                await RunAsync(cancellationToken);
             });
         }
     }

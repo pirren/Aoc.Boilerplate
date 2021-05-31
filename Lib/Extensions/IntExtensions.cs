@@ -1,9 +1,8 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 
 namespace Aoc.Lib.Extensions
 {
-    public static class StringExtensions
+    public static class IntExtensions
     {
         public static string TemplateNumberToPrint(this int day)
         {

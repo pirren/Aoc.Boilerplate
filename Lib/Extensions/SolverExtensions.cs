@@ -1,11 +1,10 @@
 ﻿using Aoc.Lib.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Aoc.Lib.Extensions
 {
-    public static class SolutionExtensions
+    public static class SolverExtensions
     {
         /// <summary>
         /// Gets both solutions
@@ -15,7 +14,7 @@ namespace Aoc.Lib.Extensions
         public static object[] Solutions(this ISolver solver)
         {
             var solutions = solver.Solve().ToArray();
-            if(solutions.Length == 0 || solutions == null)
+            if (solutions.Length == 0 || solutions == null)
                 throw new SolutionException("Found no solutions for ISolver");
             return solutions;
         }
@@ -31,7 +30,7 @@ namespace Aoc.Lib.Extensions
             var solutions = solver.Solve().ToArray();
             if (solutions.Length == 0 || solutions == null)
                 throw new SolutionException("Found no solutions for ISolver");
-            if(choice == SolutionNumber.Two && solutions.Length < 2)
+            if (choice == SolutionNumber.Two && solutions.Length < 2)
                 throw new SolutionException("ISolver has sufficient solutions");
             return choice == SolutionNumber.One ? solutions.First() : solutions.Last();
         }

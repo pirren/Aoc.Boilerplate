@@ -1,6 +1,5 @@
-﻿using Aoc.Lib.Infrastructure;
-using Aoc.Lib.Extensions;
-using Microsoft.Extensions.Configuration;
+﻿using Aoc.Lib.Extensions;
+using Aoc.Lib.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -51,9 +50,9 @@ namespace Aoc.Lib.Utils
 
         private Result EvaluateGenerationRequest(int day)
         {
-            if (day < 1 || day > 24) 
+            if (day < 1 || day > 24)
                 return Result.Fail(string.Format("Valid Solutions are 1-24. Entered: {0}", day));
-            if (TemplateExists(day).IsSuccess) 
+            if (TemplateExists(day).IsSuccess)
                 return Result.Fail("Solution already exists");
             return Result.Ok();
         }

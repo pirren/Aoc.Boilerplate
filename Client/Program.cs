@@ -4,7 +4,6 @@ using Aoc.Lib.Utils;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Hosting.Internal;
 using Serilog;
 using System;
 using System.IO;

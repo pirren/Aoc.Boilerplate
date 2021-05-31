@@ -1,15 +1,12 @@
 ﻿using Aoc.Lib.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Aoc.Tests.Extensions
 {
     public class ExtensionsTests
     {
+        #region IntExtensions
         [Fact]
         public void TemplateNumberToPrint_LowNumberReturnsExtendedFormat()
         {
@@ -32,5 +29,6 @@ namespace Aoc.Tests.Extensions
             int testValue = 5;
             Assert.IsType<string>(testValue.TemplateNumberToPrint());
         }
+        #endregion
     }
 }

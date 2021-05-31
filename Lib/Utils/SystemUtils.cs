@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Aoc.Lib.Utils
 {
@@ -22,7 +18,7 @@ namespace Aoc.Lib.Utils
         public static void PrintAsciiHeader(ConsoleColor color = ConsoleColor.Gray)
         {
             string[] ascii = File.ReadAllLines(asciiUrl);
-            foreach(var line in ascii)
+            foreach (var line in ascii)
             {
                 Print(new StringBuilder().Append(line).Append(Environment.NewLine).ToString(), color);
             }

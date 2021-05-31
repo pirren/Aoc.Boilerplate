@@ -39,14 +39,12 @@ namespace Aoc.Client.Services
             var solutionUtils = scope.ServiceProvider.GetRequiredService<SolutionUtils>();
             var config = scope.ServiceProvider.GetRequiredService<SystemConfig>();
 
-            Console.WriteLine("Aoc{0}", config.AocVersion);
-
             while (!cancellationToken.IsCancellationRequested)
             {
                 var solutions = solutionUtils.GetSolutions();
 
                 var solution = (ISolver)Activator.CreateInstance(solutions.First());
-                solution.SolveBoth();
+                var results = solution.Solutions();
 
                 //int day = 2;
                 //var result = solutionUtils.BuildTemplate(day);

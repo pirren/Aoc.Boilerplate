@@ -16,6 +16,8 @@ namespace Aoc.Client
     {
         public static async Task Main(string[] args)
         {
+            SystemUtils.PrintAsciiHeader(ConsoleColor.Green);
+
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(Configuration)
                 .CreateLogger();

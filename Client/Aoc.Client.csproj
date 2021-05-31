@@ -30,6 +30,9 @@
     <None Update="appsettings.Development.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ascii.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="serilog.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

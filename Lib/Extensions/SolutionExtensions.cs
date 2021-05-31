@@ -1,10 +1,7 @@
 ﻿using Aoc.Lib.Infrastructure;
 using Aoc.Lib.Interfaces;
-using Aoc.Lib.Utils;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Aoc.Lib.Extensions
 {
@@ -13,9 +10,9 @@ namespace Aoc.Lib.Extensions
         /// <summary>
         /// Gets both solutions
         /// </summary>
-        /// <param name="solver"></param>
+        /// <param name="solver">ISolver</param>
         /// <returns>Result</returns>
-        public static Result<object[]> GetSolutions(this ISolver solver)
+        public static Result<object[]> Solutions(this ISolver solver)
         {
             return Result.Ok(solver.Solve().ToArray());
         }
@@ -23,15 +20,20 @@ namespace Aoc.Lib.Extensions
         /// <summary>
         /// Gets a single solution
         /// </summary>
-        /// <param name="solver"></param>
+        /// <param name="solver">ISolver</param>
         /// <param name="choice"></param>
         /// <returns>Result</returns>
-        public static Result<object> GetSolution(this ISolver solver, Solution choice)
+        public static Result<object> Solution(this ISolver solver, Solution choice)
         {
             IEnumerable<object> solutions = solver.Solve();
-            return Result.Ok(choice == Solution.One ? solutions.First() : solutions.Last());
+            return Result.Ok(choice == Interfaces.Solution.One ? solutions.First() : solutions.Last());
         }
 
+        /// <summary>
+        /// Gets Problem info via custom Problem attribute
+        /// </summary>
+        /// <param name="solver">ISolver</param>
+        /// <returns>Problem</returns>
         public static Problem GetProblemInfo(this ISolver solver)
         {
             return (Problem)System.Attribute.GetCustomAttributes(solver.GetType()).First();

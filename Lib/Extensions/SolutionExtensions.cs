@@ -1,5 +1,5 @@
-﻿using Aoc.Lib.Infrastructure;
-using Aoc.Lib.Interfaces;
+﻿using Aoc.Lib.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,9 +12,12 @@ namespace Aoc.Lib.Extensions
         /// </summary>
         /// <param name="solver">ISolver</param>
         /// <returns>Result</returns>
-        public static Result<object[]> Solutions(this ISolver solver)
+        public static object[] Solutions(this ISolver solver)
         {
-            return Result.Ok(solver.Solve().ToArray());
+            var solutions = solver.Solve().ToArray();
+            if(solutions.Length == 0 || solutions == null)
+                throw new SolutionException("Found no solutions for ISolver");
+            return solutions;
         }
 
         /// <summary>
@@ -23,10 +26,14 @@ namespace Aoc.Lib.Extensions
         /// <param name="solver">ISolver</param>
         /// <param name="choice"></param>
         /// <returns>Result</returns>
-        public static Result<object> Solution(this ISolver solver, Solution choice)
+        public static object Solution(this ISolver solver, SolutionNumber choice)
         {
-            IEnumerable<object> solutions = solver.Solve();
-            return Result.Ok(choice == Interfaces.Solution.One ? solutions.First() : solutions.Last());
+            var solutions = solver.Solve().ToArray();
+            if (solutions.Length == 0 || solutions == null)
+                throw new SolutionException("Found no solutions for ISolver");
+            if(choice == SolutionNumber.Two && solutions.Length < 2)
+                throw new SolutionException("ISolver has sufficient solutions");
+            return choice == SolutionNumber.One ? solutions.First() : solutions.Last();
         }
 
         /// <summary>
@@ -37,6 +44,11 @@ namespace Aoc.Lib.Extensions
         public static Problem GetProblemInfo(this ISolver solver)
         {
             return (Problem)System.Attribute.GetCustomAttributes(solver.GetType()).First();
+        }
+
+        public class SolutionException : ApplicationException
+        {
+            public SolutionException(string message) : base(message) { }
         }
     }
 }

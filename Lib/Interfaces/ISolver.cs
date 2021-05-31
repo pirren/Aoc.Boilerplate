@@ -9,7 +9,7 @@ namespace Aoc.Lib.Interfaces
         string Data { get; }
     }
 
-    public enum Solution
+    public enum SolutionNumber
     {
         One,
         Two

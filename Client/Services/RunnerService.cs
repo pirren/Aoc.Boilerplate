@@ -1,7 +1,11 @@
-﻿using Aoc.Lib;
+﻿using Aoc.Client.Solutions;
+using Aoc.Lib;
+using Aoc.Lib.Extensions;
+using Aoc.Lib.Interfaces;
 using Aoc.Lib.Utils;
 using Aoc.Lib.Workers;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -35,12 +39,14 @@ namespace Aoc.Client.Services
             var solutionUtils = scope.ServiceProvider.GetRequiredService<SolutionUtils>();
             var config = scope.ServiceProvider.GetRequiredService<SystemConfig>();
 
+            Console.WriteLine("Aoc{0}", config.AocVersion);
+
             while (!cancellationToken.IsCancellationRequested)
             {
-                Console.WriteLine("Aoc{0}", config.AocVersion);
                 var solutions = solutionUtils.GetSolutions();
 
-                object solution = Activator.CreateInstance(solutions.First());
+                var solution = (ISolver)Activator.CreateInstance(solutions.First());
+                solution.SolveBoth();
 
                 //int day = 2;
                 //var result = solutionUtils.BuildTemplate(day);
@@ -53,9 +59,12 @@ namespace Aoc.Client.Services
 
         protected override async Task RunningAsync(CancellationToken cancellationToken)
         {
-            Thread.Sleep(50);
-            await Task.Factory.StartNew(async () => await RunAsync(cancellationToken));
-            //await RunAsync(cancellationToken);
+            await Task.Factory.StartNew(async () => {
+                Thread.Sleep(300); // wait for host to finish
+                Log.Information("Starting RunnerService");
+                Console.Write('\n');
+                await RunAsync(cancellationToken); 
+            });
         }
     }
 }

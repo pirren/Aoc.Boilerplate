@@ -9,12 +9,5 @@ namespace Aoc.Lib.Extensions
         {
             return day > 9 ? day.ToString() : new StringBuilder().Append('0').Append(day).ToString();
         }
-
-        public static void Print(this string text, ConsoleColor color = ConsoleColor.Gray)
-        {
-            Console.ForegroundColor = color;
-            Console.Write(text);
-            Console.ForegroundColor = ConsoleColor.Gray;
-        }
     }
 }

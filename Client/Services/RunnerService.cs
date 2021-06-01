@@ -1,4 +1,5 @@
-﻿using Aoc.Lib;
+﻿using Aoc.Client.Core;
+using Aoc.Lib;
 using Aoc.Lib.Extensions;
 using Aoc.Lib.Interfaces;
 using Aoc.Lib.Utils;
@@ -34,22 +35,16 @@ namespace Aoc.Client.Services
         {
             using var scope = scopeFactory.CreateScope();
 
-            var solutionUtils = scope.ServiceProvider.GetRequiredService<SolutionUtils>();
-            var config = scope.ServiceProvider.GetRequiredService<SystemConfig>();
+            var core = scope.ServiceProvider.GetRequiredService<IProgramCore>();
 
             while (!cancellationToken.IsCancellationRequested)
             {
-                var solutions = solutionUtils.GetSolutions();
-
-                var solution = (ISolver)Activator.CreateInstance(solutions.First());
-                var results = solution.Solutions();
+                core.Run();
 
                 //int day = 2;
                 //var result = solutionUtils.BuildTemplate(day);
                 //if (result.IsSuccess) Console.WriteLine("Solution for day {0} successfully created", day);
                 //else Console.WriteLine("Could not create solution: {0}", result.Error);
-
-                Console.ReadLine();
             }
         }
 

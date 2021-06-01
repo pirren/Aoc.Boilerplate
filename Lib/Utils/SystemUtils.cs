@@ -19,9 +19,7 @@ namespace Aoc.Lib.Utils
         {
             string[] ascii = File.ReadAllLines(asciiUrl);
             foreach (var line in ascii)
-            {
                 Print(new StringBuilder().Append(line).Append(Environment.NewLine).ToString(), color);
-            }
         }
     }
 }

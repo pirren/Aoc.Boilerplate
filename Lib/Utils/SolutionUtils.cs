@@ -12,23 +12,30 @@ namespace Aoc.Lib.Utils
     public class SolutionUtils
     {
         private readonly SystemConfig config;
+        private readonly Assembly[] assemblies;
         private readonly string solutionsNamespace = "Aoc.Client.Solutions";
 
         public SolutionUtils(SystemConfig configuration)
         {
             this.config = configuration;
+            assemblies = AppDomain.CurrentDomain.GetAssemblies();
             Directory.CreateDirectory(config.SolutionsBasePath); // base path should always exist
         }
 
-        public List<Type> GetSolutions()
+        /// <summary>
+        /// Get all Solvers
+        /// </summary>
+        /// <param name="filter">Filter, e.g. Day01</param>
+        /// <returns>List of Types</returns>
+        public List<Type> GetSolvers(string filter = "")
         {
-            Assembly asm = Assembly.GetExecutingAssembly();
-
-            var foo = AppDomain.CurrentDomain.GetAssemblies()
+            var query = assemblies.AsQueryable()
                 .SelectMany(t => t.GetTypes())
                 .Where(t => t.IsClass && t.Namespace == solutionsNamespace);
 
-            return foo.ToList();
+            if (!string.IsNullOrEmpty(filter)) query = query.Where(t => t.Name == filter);
+                
+            return query.ToList();
         }
 
         public Result GenerateTemplate(int day)
@@ -62,7 +69,7 @@ namespace Aoc.Lib.Utils
             return File.Exists(GetTemplateUrl(day)) ? Result.Ok() : Result.Fail("Solution does not exist");
         }
 
-        private string GetTemplateShortName(int day)
+        public string GetTemplateShortName(int day)
         {
             return new StringBuilder().Append("Day").Append(day.TemplateNumberToPrint()).ToString();
         }

@@ -1,5 +1,7 @@
-﻿using Aoc.Client.Services;
+﻿using Aoc.Client.Core;
+using Aoc.Client.Services;
 using Aoc.Lib;
+using Aoc.Lib.Interfaces;
 using Aoc.Lib.Utils;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -54,6 +56,7 @@ namespace Aoc.Client
             })
             .ConfigureServices((hostCtx, services) =>
             {
+                services.AddSingleton<IProgramCore, ProgramCore>();
                 services.AddSingleton<SystemConfig>();
                 services.AddSingleton<SolutionUtils>();
                 services.AddSingleton(_ => hostCtx.Configuration);

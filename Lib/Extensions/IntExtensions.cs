@@ -8,5 +8,17 @@ namespace Aoc.Lib.Extensions
         {
             return day > 9 ? day.ToString() : new StringBuilder().Append('0').Append(day).ToString();
         }
+
+        public static bool IsValid(this int choice, int numProblems)
+        {
+            return choice > 0 && choice <= numProblems;
+        }
+
+        public static string ProblemPartToString(this int part)
+        {
+            if (part == 1) return "Part One: ";
+            if (part == 2) return "Part Two: ";
+            throw new System.Exception(string.Format("Undefined part choice: {0}", part));
+        }
     }
 }

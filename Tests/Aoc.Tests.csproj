@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Client\Aoc.Client.csproj" />
+    <ProjectReference Include="..\Configuration\Aoc.Configuration.csproj" />
     <ProjectReference Include="..\Lib\Aoc.Lib.csproj" />
   </ItemGroup>
 

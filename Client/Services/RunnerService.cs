@@ -1,14 +1,10 @@
-﻿using Aoc.Client.Core;
-using Aoc.Lib;
-using Aoc.Lib.Config;
-using Aoc.Lib.Extensions;
+﻿using Aoc.Configuration;
 using Aoc.Lib.Interfaces;
 using Aoc.Lib.Utils;
 using Aoc.Lib.Workers;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -22,7 +18,7 @@ namespace Aoc.Client.Services
             "\n\t- [a] run all" +
             "\n\t- [c] create template" +
             "\n\t- [l] list templates" +
-            "\n\t- [ctrl+c] quit\n\n";
+            "\n\t- [ctrl+c] quit\n";
 
         private readonly IServiceScopeFactory scopeFactory;
 

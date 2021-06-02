@@ -1,6 +1,6 @@
 ﻿using Aoc.Client.Core;
 using Aoc.Client.Services;
-using Aoc.Lib.Config;
+using Aoc.Configuration;
 using Aoc.Lib.Interfaces;
 using Aoc.Lib.Utils;
 using Microsoft.Extensions.Configuration;
@@ -17,7 +17,7 @@ namespace Aoc.Client
     {
         public static async Task Main(string[] args)
         {
-            SystemUtils.PrintAsciiHeader(AppConfig, ConsoleColor.Green);
+            SystemUtils.PrintAsciiHeader(new SystemConfig(AppConfig), ConsoleColor.Green);
 
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(SerilogConfiguration)

@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Configuration\Aoc.Configuration.csproj" />
     <ProjectReference Include="..\Lib\Aoc.Lib.csproj" />
   </ItemGroup>
 
@@ -43,6 +44,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Solutions\Day01\day-01.in">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Solutions\Day02\day-02.in">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

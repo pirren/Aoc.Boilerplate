@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System.IO;
 
-namespace Aoc.Lib.Config
+namespace Aoc.Configuration
 {
     public class TemplateConfig
     {

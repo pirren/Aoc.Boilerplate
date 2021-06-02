@@ -1,4 +1,4 @@
-﻿using Aoc.Lib.Config;
+﻿using Aoc.Configuration;
 using Aoc.Lib.Extensions;
 using Aoc.Lib.Infrastructure;
 using System;
@@ -36,7 +36,7 @@ namespace Aoc.Lib.Utils
         {
             var query = assemblies.AsQueryable()
                 .SelectMany(t => t.GetTypes())
-                .Where(t => t.IsClass && t.Namespace == solutionsNamespace);
+                .Where(t => t.IsClass && t.Namespace == solutionsNamespace && t.Name.Contains("Day") );
 
             if (!string.IsNullOrEmpty(filter)) query = query.Where(t => t.Name == filter);
                 

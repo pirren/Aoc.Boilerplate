@@ -1,4 +1,4 @@
-﻿using Aoc.Lib.Config;
+﻿using Aoc.Configuration;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
@@ -10,6 +10,11 @@ namespace Aoc.Lib.Utils
     {
         private const string asciiUrl = @"../../../Resources/ascii.txt";
 
+        public static void NewBlock()
+        {
+            Print(Environment.NewLine);
+        }
+
         public static void Print(string text = "", ConsoleColor color = ConsoleColor.Gray)
         {
             Console.ForegroundColor = color;
@@ -17,9 +22,9 @@ namespace Aoc.Lib.Utils
             Console.ForegroundColor = ConsoleColor.Gray;
         }
 
-        public static void PrintAsciiHeader(IConfiguration config, ConsoleColor color = ConsoleColor.Gray)
+        public static void PrintAsciiHeader(SystemConfig config, ConsoleColor color = ConsoleColor.Gray)
         {
-            string[] ascii = File.ReadAllLines(config.GetValue<string>("AsciiUrl"));
+            string[] ascii = File.ReadAllLines(config.AsciiUrl);
             foreach (var line in ascii)
                 Print(new StringBuilder().Append(line).Append(Environment.NewLine).ToString(), color);
         }

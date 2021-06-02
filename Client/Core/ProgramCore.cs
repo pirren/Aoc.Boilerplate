@@ -1,7 +1,8 @@
-﻿using Aoc.Lib.Config;
+﻿using Aoc.Configuration;
 using Aoc.Lib.Extensions;
 using Aoc.Lib.Interfaces;
 using Aoc.Lib.Utils;
+using Serilog;
 using System;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,10 @@ namespace Aoc.Client.Core
         private readonly SystemConfig config;
         private readonly SolutionUtils solutionUtils;
 
-        private const string TextInput = "Enter operation: ";
+        private const string InputOperationPrompt = "Enter operation: ";
+        private const string InputProblemNamePrompt = "Enter problem name: ";
+        private const string InputProblemDayPrompt = "Enter problem day: ";
+
         private const string CommandRunAll = "a";
         private const string CommandCreateTemplate = "c";
         private const string CommandListTemplates = "l";
@@ -33,39 +37,76 @@ namespace Aoc.Client.Core
         /// </summary>
         public void Run()
         {
-            SystemUtils.Print(TextInput);
+            SystemUtils.NewBlock();
 
-            string rawinput = Console.ReadLine();
+            UserInput userInput = new();
+            var indataResult = userInput.GetString(InputOperationPrompt);
 
-            SystemUtils.Print("\n");
+            if (indataResult.IsFailure) return;
+            string input = indataResult.Value.ToLower();
 
-            if (rawinput == null) return;
-
-            string input = rawinput.ToLower();
             if (input == CommandRunAll) 
                 RunAll();
             if (input == CommandCreateTemplate)
                 RunCreateTemplate();
             if (input == CommandListTemplates)
                 RunListTemplates();
-            if (int.TryParse(input, out int choice) && choice.IsValid(NumProblems))
-                RunProblem(choice);
+            if (int.TryParse(input, out int choice))
+                RunProblem(choice, true);
         }
 
         private void RunCreateTemplate()
         {
-            SystemUtils.Print("\n");
-            var result = solutionUtils.GenerateTemplate(3, "Problem 3");
+            UserInput userInput = new();
+
+            var dayResult = userInput.GetInt(InputProblemDayPrompt);
+            if (dayResult.IsFailure) return;
+            int problemDay = dayResult.Value;
+
+            if (solutionUtils.TemplateExists(problemDay).IsSuccess)
+            {
+                SystemUtils.Print("Template already exists!");
+                return;
+            }
+
+            var problemResult = userInput.GetString(InputProblemNamePrompt);
+            if (problemResult.IsFailure) return;
+            string problemName = problemResult.Value;
+
+            try
+            {
+                solutionUtils.GenerateTemplate(problemDay, problemName);
+                Log.Information("Successfully generated template for day: {0}", problemDay.TemplateNumberToPrint());
+            }
+            catch(Exception e)
+            {
+                Log.Error("Failed generating template for day: {0}. Exception: {1}", problemDay.TemplateNumberToPrint(), e);
+            }
         }
 
         private void RunListTemplates()
         {
+            var solvers = solutionUtils
+                .GetSolvers()
+                .Select(s => (ISolver)Activator.CreateInstance(s))
+                .ToList();
 
+            SystemUtils.NewBlock();
+
+            SystemUtils.Print($"Existing problem templates:\n");
+            foreach (var solver in solvers)
+                SystemUtils.Print($"{solver.GetProblemInfo().GetDay()}\n", ConsoleColor.Green);
         }
 
-        private void RunProblem(int choice)
+        private void RunProblem(int choice, bool singleOrLastIteration = false)
         {
-            if (solutionUtils.TemplateExists(choice).IsFailure) return;
+            if (solutionUtils.TemplateExists(choice).IsFailure)
+            {
+                SystemUtils.Print($"Problem number {choice} does not exist!\n", ConsoleColor.Red);
+                return;
+            }
+
+            SystemUtils.NewBlock();
 
             Type type = solutionUtils.GetSolvers(solutionUtils.GetTemplateShortName(choice)).First();
             if (type == null) return;
@@ -73,24 +114,30 @@ namespace Aoc.Client.Core
             ISolver solver = (ISolver)Activator.CreateInstance(type);
             var problemInfo = solver.GetProblemInfo();
 
-            SystemUtils.Print(new StringBuilder().Append("Day: ").Append(problemInfo.GetDay()).Append('\n').ToString());
-            SystemUtils.Print(new StringBuilder().Append("Name: ").Append(problemInfo.GetName()).Append('\n').ToString());
+            SystemUtils.Print("--------------------------------------\n\n", ConsoleColor.Cyan);
 
-            int part = 1;
+            SystemUtils.Print($"Problem: {problemInfo.GetDay()}\n");
+            SystemUtils.Print($"Name: {problemInfo.GetName()}\n\n");
+
+            int solutionNumber = 0;
             foreach (var result in solver.Solutions())
             {
-                SystemUtils.Print(new StringBuilder().Append(part.ProblemPartToString()).ToString());
-                SystemUtils.Print(new StringBuilder().Append(result.ToString()).Append('\n').ToString(), 
-                    ConsoleColor.Green);
-                part++;
+                solutionNumber++;
+                SystemUtils.Print($"{solutionNumber.ProblemPartToString()}");
+                SystemUtils.Print($"{result}\n",ConsoleColor.Green);
             }
 
-            SystemUtils.Print("\n");
+            if(singleOrLastIteration)
+                SystemUtils.Print("\n--------------------------------------\n", ConsoleColor.Cyan);
         }
 
         private void RunAll()
         {
-            SystemUtils.Print("Runs all...\n");
+            var problemCount = solutionUtils.GetSolvers().Count;
+            for(int i = 1; i <= problemCount; i++)
+            {
+                RunProblem(i, i == problemCount);
+            }
         }
     }
 }

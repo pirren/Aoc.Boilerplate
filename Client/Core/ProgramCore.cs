@@ -108,7 +108,7 @@ namespace Aoc.Client.Core
             ISolver solver = (ISolver)Activator.CreateInstance(type);
             if (!solver.Solve().Any())
             {
-                SystemUtils.Print("No solutions available! Check the template.\t", ConsoleColor.Red);
+                SystemUtils.Print("No solutions available! Check the template.\n", ConsoleColor.Red);
             }
             var problemInfo = solver.GetProblemInfo();
 

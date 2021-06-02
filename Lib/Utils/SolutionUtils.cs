@@ -36,10 +36,10 @@ namespace Aoc.Lib.Utils
         {
             var query = assemblies.AsQueryable()
                 .SelectMany(t => t.GetTypes())
-                .Where(t => t.IsClass && t.Namespace == solutionsNamespace && t.Name.Contains("Day") );
+                .Where(t => t.IsClass && t.Namespace == solutionsNamespace && t.Name.Contains("Day"));
 
             if (!string.IsNullOrEmpty(filter)) query = query.Where(t => t.Name == filter);
-                
+
             return query.ToList();
         }
 
@@ -63,7 +63,7 @@ namespace Aoc.Lib.Utils
                 string fullIndataUrl = Path.Combine(templateFolderUrl, string.Format(indataFileNameFormat, day.TemplateNumberToPrint()));
                 using StreamWriter indataWriter = File.CreateText(fullIndataUrl);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return Result.Fail(string.Format("Caught error trying to generate template {0}: {1}", GetTemplateShortName(day), e));
             }

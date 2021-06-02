@@ -5,7 +5,6 @@ using Aoc.Lib.Utils;
 using Serilog;
 using System;
 using System.Linq;
-using System.Text;
 
 namespace Aoc.Client.Core
 {
@@ -45,7 +44,7 @@ namespace Aoc.Client.Core
             if (indataResult.IsFailure) return;
             string input = indataResult.Value.ToLower();
 
-            if (input == CommandRunAll) 
+            if (input == CommandRunAll)
                 RunAll();
             if (input == CommandCreateTemplate)
                 RunCreateTemplate();
@@ -107,6 +106,10 @@ namespace Aoc.Client.Core
             if (type == null) return;
 
             ISolver solver = (ISolver)Activator.CreateInstance(type);
+            if (!solver.Solve().Any())
+            {
+                SystemUtils.Print("No solutions available! Check the template.\t", ConsoleColor.Red);
+            }
             var problemInfo = solver.GetProblemInfo();
 
             SystemUtils.Print("--------------------------------------\n\n", ConsoleColor.Cyan);
@@ -115,21 +118,21 @@ namespace Aoc.Client.Core
             SystemUtils.Print($"Name: {problemInfo.GetName()}\n\n");
 
             int solutionNumber = 0;
-            foreach (var result in solver.Solutions())
+            foreach (var result in solver.Solve())
             {
                 solutionNumber++;
                 SystemUtils.Print($"{solutionNumber.ProblemPartToString()}");
-                SystemUtils.Print($"{result}\n",ConsoleColor.Green);
+                SystemUtils.Print($"{result}\n", ConsoleColor.Green);
             }
 
-            if(singleOrLastIteration)
+            if (singleOrLastIteration)
                 SystemUtils.Print("\n--------------------------------------\n", ConsoleColor.Cyan);
         }
 
         private void RunAll()
         {
             var problemCount = solutionUtils.GetSolvers().Count;
-            for(int i = 1; i <= problemCount; i++)
+            for (int i = 1; i <= problemCount; i++)
             {
                 RunProblem(i, i == problemCount);
             }

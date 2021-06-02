@@ -15,7 +15,9 @@ namespace Aoc.Lib.Utils
         private readonly SystemConfig systemConfig;
         private readonly TemplateConfig templateConfig;
         private readonly Assembly[] assemblies;
-        private readonly string solutionsNamespace = "Aoc.Client.Solutions";
+
+        private const string solutionsNamespace = "Aoc.Client.Solutions";
+        private const string indataFileNameFormat = "day-{0}.in";
 
         public SolutionUtils(SystemConfig systemConfig, TemplateConfig templateConfig)
         {
@@ -46,19 +48,25 @@ namespace Aoc.Lib.Utils
             var eval = EvaluateGenerationRequest(day);
             if (eval.IsFailure) return eval;
 
-            var solutionFolderUrl = GetTemplateFolderUrl(day);
+            var templateFolderUrl = GetTemplateFolderUrl(day);
             var fullUrl = GetTemplateUrl(day);
 
-            Directory.CreateDirectory(solutionFolderUrl);
+            Directory.CreateDirectory(templateFolderUrl);
+            try
+            {
+                using StreamWriter fileWriter = File.CreateText(fullUrl);
+                var templateBase = templateConfig.TemplateBase;
+                foreach (var line in templateBase)
+                    fileWriter.WriteLine(line.Replace("{0}", GetTemplateShortName(day)).Replace("{1}", problemName).Replace("{2}", day.TemplateNumberToPrint()));
+                fileWriter.Close();
 
-            using StreamWriter sw = File.CreateText(fullUrl);
-
-            var templateBase = templateConfig.TemplateBase;
-
-            foreach (var line in templateBase)
-                sw.WriteLine(line.Replace("{0}", GetTemplateShortName(day)).Replace("{1}", problemName).Replace("{2}", day.TemplateNumberToPrint()));
-
-            sw.Close();
+                string fullIndataUrl = Path.Combine(templateFolderUrl, string.Format(indataFileNameFormat, day.TemplateNumberToPrint()));
+                using StreamWriter indataWriter = File.CreateText(fullIndataUrl);
+            }
+            catch(Exception e)
+            {
+                return Result.Fail(string.Format("Caught error trying to generate template {0}: {1}", GetTemplateShortName(day), e));
+            }
 
             return Result.Ok(fullUrl);
         }

@@ -76,7 +76,7 @@ namespace Aoc.Lib.Utils
             if (day < 1 || day > 24)
                 return Result.Fail(string.Format("Valid Solutions are 1-24. Entered: {0}", day));
             if (TemplateExists(day).IsSuccess)
-                return Result.Fail("Solution already exists");
+                return Result.Fail(string.Format("Solution for day {0} already exists", day));
             return Result.Ok();
         }
 

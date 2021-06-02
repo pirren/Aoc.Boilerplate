@@ -59,29 +59,24 @@ namespace Aoc.Client.Core
         {
             UserInput userInput = new();
 
+            SystemUtils.NewBlock();
+
             var dayResult = userInput.GetInt(InputProblemDayPrompt);
             if (dayResult.IsFailure) return;
             int problemDay = dayResult.Value;
-
-            if (solutionUtils.TemplateExists(problemDay).IsSuccess)
-            {
-                SystemUtils.Print("Template already exists!");
-                return;
-            }
 
             var problemResult = userInput.GetString(InputProblemNamePrompt);
             if (problemResult.IsFailure) return;
             string problemName = problemResult.Value;
 
-            try
+
+            var result = solutionUtils.GenerateTemplate(problemDay, problemName);
+            if (result.IsFailure)
             {
-                solutionUtils.GenerateTemplate(problemDay, problemName);
-                Log.Information("Successfully generated template for day: {0}", problemDay.TemplateNumberToPrint());
+                SystemUtils.Print($"{result.Error}\n", ConsoleColor.Red);
+                return;
             }
-            catch(Exception e)
-            {
-                Log.Error("Failed generating template for day: {0}. Exception: {1}", problemDay.TemplateNumberToPrint(), e);
-            }
+            Log.Information("Successfully generated template for day: {0}", problemDay.TemplateNumberToPrint());
         }
 
         private void RunListTemplates()

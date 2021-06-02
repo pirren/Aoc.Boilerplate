@@ -1,6 +1,6 @@
 ﻿using Aoc.Client.Core;
 using Aoc.Client.Services;
-using Aoc.Lib;
+using Aoc.Lib.Config;
 using Aoc.Lib.Interfaces;
 using Aoc.Lib.Utils;
 using Microsoft.Extensions.Configuration;
@@ -17,10 +17,10 @@ namespace Aoc.Client
     {
         public static async Task Main(string[] args)
         {
-            SystemUtils.PrintAsciiHeader(ConsoleColor.Green);
+            SystemUtils.PrintAsciiHeader(AppConfig, ConsoleColor.Green);
 
             Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(Configuration)
+                .ReadFrom.Configuration(SerilogConfiguration)
                 .CreateLogger();
 
             try
@@ -41,23 +41,29 @@ namespace Aoc.Client
             }
         }
 
-        public static IConfiguration Configuration { get; } = new ConfigurationBuilder()
+        public static IConfiguration SerilogConfiguration { get; } = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("serilog.json", optional: false, reloadOnChange: true)
             .AddJsonFile("serilog.Development.json", optional: true, reloadOnChange: true)
+            .Build();
+
+        public static IConfiguration AppConfig { get; } = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
             .Build();
 
         public static IHostBuilder CreateHostBuilder(string[] args)
             => Host.CreateDefaultBuilder(args)
             .ConfigureAppConfiguration((hostCtx, config) =>
             {
-                config.SetBasePath(Directory.GetCurrentDirectory());
-                config.AddJsonFile("appsettings.Development.json", true);
+                config.AddConfiguration(AppConfig);
             })
             .ConfigureServices((hostCtx, services) =>
             {
                 services.AddSingleton<IProgramCore, ProgramCore>();
                 services.AddSingleton<SystemConfig>();
+                services.AddSingleton<TemplateConfig>();
                 services.AddSingleton<SolutionUtils>();
                 services.AddSingleton(_ => hostCtx.Configuration);
                 services.AddHostedService<RunnerService>();

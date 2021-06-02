@@ -1,5 +1,6 @@
 ﻿using Aoc.Client.Core;
 using Aoc.Lib;
+using Aoc.Lib.Config;
 using Aoc.Lib.Extensions;
 using Aoc.Lib.Interfaces;
 using Aoc.Lib.Utils;
@@ -15,14 +16,13 @@ namespace Aoc.Client.Services
 {
     public class RunnerService : WorkerBase
     {
-        private const string solutionTemplate = @"            using Aoc2020.Client.Services;
-            using Microsoft.Extensions.Configuration;
-            using Microsoft.Extensions.DependencyInjection;
-            using Microsoft.Extensions.Hosting;
-            using Serilog;
-            using System;
-            using System.IO;
-            ";
+        private const string TextStartup = "Found {0} problems!\n\n";
+        private const string TextHelp = "Following operations are available:\n" +
+            "\n\t- [number] run single" +
+            "\n\t- [a] run all" +
+            "\n\t- [c] create template" +
+            "\n\t- [l] list templates" +
+            "\n\t- [ctrl+c] quit\n\n";
 
         private readonly IServiceScopeFactory scopeFactory;
 
@@ -34,17 +34,16 @@ namespace Aoc.Client.Services
         protected override async Task RunAsync(CancellationToken cancellationToken)
         {
             using var scope = scopeFactory.CreateScope();
-
+            var conf = scope.ServiceProvider.GetRequiredService<SystemConfig>();
             var core = scope.ServiceProvider.GetRequiredService<IProgramCore>();
+            var solutionUtils = scope.ServiceProvider.GetRequiredService<SolutionUtils>();
+
+            SystemUtils.Print(string.Format(TextStartup, solutionUtils.GetSolvers().Count));
+            SystemUtils.Print(TextHelp);
 
             while (!cancellationToken.IsCancellationRequested)
             {
                 core.Run();
-
-                //int day = 2;
-                //var result = solutionUtils.BuildTemplate(day);
-                //if (result.IsSuccess) Console.WriteLine("Solution for day {0} successfully created", day);
-                //else Console.WriteLine("Could not create solution: {0}", result.Error);
             }
         }
 

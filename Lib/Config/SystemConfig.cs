@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
 
-namespace Aoc.Lib
+namespace Aoc.Lib.Config
 {
     public class SystemConfig
     {
@@ -11,9 +11,10 @@ namespace Aoc.Lib
         {
             AocVersion = config.GetValue<string>("AocVersion") ?? String.Empty;
             SolutionsBasePath = config.GetValue<string>("SolutionsRootFolder") ?? String.Empty;
+            SolutionsBasePath = config.GetValue<string>("SolutionsRootFolder") ?? String.Empty;
         }
 
-        public SystemConfig(string basePath)
+        public SystemConfig(string basePath) // todo: get rid of this crap 
         {
             SolutionsBasePath = basePath;
         }

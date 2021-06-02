@@ -1,24 +1,22 @@
-﻿using Aoc.Lib;
+﻿using Aoc.Lib.Config;
 using Aoc.Lib.Extensions;
 using Aoc.Lib.Interfaces;
 using Aoc.Lib.Utils;
-using Serilog;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Aoc.Client.Core
 {
     public class ProgramCore : IProgramCore
     {
-        private const string TextStartup = "Found {0} problems!\n";
-        private const string TextHelp = "[number] to run single problem. [a] to run all. [ctrl+c] to quit.\n";
-        private const string TextInput = "Enter operation: ";
-
         private readonly SystemConfig config;
         private readonly SolutionUtils solutionUtils;
+
+        private const string TextInput = "Enter operation: ";
+        private const string CommandRunAll = "a";
+        private const string CommandCreateTemplate = "c";
+        private const string CommandListTemplates = "l";
 
         public int NumProblems { get; private set; }
         public bool Running { get; private set; }
@@ -31,24 +29,38 @@ namespace Aoc.Client.Core
         }
 
         /// <summary>
-        /// Runts core, needs to be looped
+        /// Runs core, needs to be looped
         /// </summary>
         public void Run()
         {
-            SystemUtils.Print(string.Format(TextStartup, NumProblems));
-            SystemUtils.Print(TextHelp);
             SystemUtils.Print(TextInput);
 
-            string input = Console.ReadLine();
+            string rawinput = Console.ReadLine();
 
             SystemUtils.Print("\n");
 
-            if (input == null) 
-                return;
-            if (input.ToLower() == "a") 
+            if (rawinput == null) return;
+
+            string input = rawinput.ToLower();
+            if (input == CommandRunAll) 
                 RunAll();
+            if (input == CommandCreateTemplate)
+                RunCreateTemplate();
+            if (input == CommandListTemplates)
+                RunListTemplates();
             if (int.TryParse(input, out int choice) && choice.IsValid(NumProblems))
                 RunProblem(choice);
+        }
+
+        private void RunCreateTemplate()
+        {
+            SystemUtils.Print("\n");
+            var result = solutionUtils.GenerateTemplate(3, "Problem 3");
+        }
+
+        private void RunListTemplates()
+        {
+
         }
 
         private void RunProblem(int choice)

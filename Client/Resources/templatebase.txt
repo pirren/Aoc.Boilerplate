@@ -1,0 +1,23 @@
+﻿using Aoc.Lib.Interfaces;
+using System.Collections.Generic;
+using System.IO;
+
+namespace Aoc.Client.Solutions
+{
+    [Problem("{0}", "{1}")]
+    public class {0} : ISolver
+    {
+        public string Data { get; private set; }
+
+        public {0}()
+        {
+            Data = File.ReadAllText("Solutions/{0}/day-{2}.in");
+        }
+
+        public IEnumerable<object> Solve()
+        {
+            yield return 0;
+            yield return 0;
+        }
+    }
+}

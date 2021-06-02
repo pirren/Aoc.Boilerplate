@@ -9,18 +9,18 @@ namespace Aoc.Tests.Utils
         public TestFixture()
         {
             var root = new ConfigurationBuilder().AddJsonFile("utils-test-config.json").Build();
-            TestDataFolder = root["SolutionsRootFolder"];
-            if (!Directory.Exists(TestDataFolder))
+            SolutionsRootFolder = root["SolutionsRootFolder"];
+            SolutionTestTemplate = root["TestTemplate"];
+            if (!Directory.Exists(SolutionsRootFolder))
                 throw new Exception(
-                    $"Test data folder {TestDataFolder} not found. Current directory: {Directory.GetCurrentDirectory()}");
+                    $"Test data folder {SolutionsRootFolder} not found. Current directory: {Directory.GetCurrentDirectory()}");
         }
 
         public void Dispose()
         {
         }
 
-        public string TestDataFolder { get; }
-
-        public string ExcelTestFile(string filename) => Path.Combine(TestDataFolder, filename);
+        public string SolutionsRootFolder { get; }
+        public string SolutionTestTemplate { get; set; }
     }
 }

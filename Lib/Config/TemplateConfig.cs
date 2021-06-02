@@ -1,0 +1,19 @@
+﻿using Microsoft.Extensions.Configuration;
+using System.IO;
+
+namespace Aoc.Lib.Config
+{
+    public class TemplateConfig
+    {
+        public string[] TemplateBase { get; }
+        public TemplateConfig(IConfiguration config)
+        {
+            TemplateBase = File.ReadAllLines(config.GetValue<string>("TemplateBaseUrl"));
+        }
+
+        public TemplateConfig(string[] templateTestingBase) // todo: get rid of this crap 
+        {
+            TemplateBase = templateTestingBase;
+        }
+    }
+}

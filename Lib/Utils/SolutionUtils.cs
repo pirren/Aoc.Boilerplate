@@ -1,4 +1,5 @@
-﻿using Aoc.Lib.Extensions;
+﻿using Aoc.Lib.Config;
+using Aoc.Lib.Extensions;
 using Aoc.Lib.Infrastructure;
 using System;
 using System.Collections.Generic;
@@ -11,15 +12,17 @@ namespace Aoc.Lib.Utils
 {
     public class SolutionUtils
     {
-        private readonly SystemConfig config;
+        private readonly SystemConfig systemConfig;
+        private readonly TemplateConfig templateConfig;
         private readonly Assembly[] assemblies;
         private readonly string solutionsNamespace = "Aoc.Client.Solutions";
 
-        public SolutionUtils(SystemConfig configuration)
+        public SolutionUtils(SystemConfig systemConfig, TemplateConfig templateConfig)
         {
-            this.config = configuration;
+            this.systemConfig = systemConfig;
+            this.templateConfig = templateConfig;
             assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            Directory.CreateDirectory(config.SolutionsBasePath); // base path should always exist
+            Directory.CreateDirectory(systemConfig.SolutionsBasePath); // base path should always exist
         }
 
         /// <summary>
@@ -38,7 +41,7 @@ namespace Aoc.Lib.Utils
             return query.ToList();
         }
 
-        public Result GenerateTemplate(int day)
+        public Result GenerateTemplate(int day, string problemName)
         {
             var eval = EvaluateGenerationRequest(day);
             if (eval.IsFailure) return eval;
@@ -50,7 +53,12 @@ namespace Aoc.Lib.Utils
 
             using StreamWriter sw = File.CreateText(fullUrl);
 
-            //todo: Add filecontent here
+            var templateBase = templateConfig.TemplateBase;
+
+            foreach (var line in templateBase)
+                sw.WriteLine(line.Replace("{0}", GetTemplateShortName(day)).Replace("{1}", problemName).Replace("{2}", day.TemplateNumberToPrint()));
+
+            sw.Close();
 
             return Result.Ok(fullUrl);
         }
@@ -86,12 +94,12 @@ namespace Aoc.Lib.Utils
 
         private string GetTemplateFolderUrl(int day)
         {
-            return Path.Combine(config.SolutionsBasePath, GetTemplateShortName(day));
+            return Path.Combine(systemConfig.SolutionsBasePath, GetTemplateShortName(day));
         }
 
         public string GetTemplateUrl(int day)
         {
-            return Path.Combine(config.SolutionsBasePath, GetSolutionTemplateFolderName(day), GetTemplateFileName(day));
+            return Path.Combine(systemConfig.SolutionsBasePath, GetSolutionTemplateFolderName(day), GetTemplateFileName(day));
         }
     }
 }

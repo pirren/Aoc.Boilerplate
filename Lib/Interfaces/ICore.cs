@@ -1,6 +1,6 @@
 ﻿namespace Aoc.Lib.Interfaces
 {
-    public interface IProgramCore
+    public interface ICore
     {
         void Run();
     }

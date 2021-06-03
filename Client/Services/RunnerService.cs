@@ -1,4 +1,5 @@
-﻿using Aoc.Lib.Interfaces;
+﻿using Aoc.Lib.Helpers;
+using Aoc.Lib.Interfaces;
 using Aoc.Lib.Utils;
 using Aoc.Lib.Workers;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,11 +30,11 @@ namespace Aoc.Client.Services
         protected override async Task RunAsync(CancellationToken cancellationToken)
         {
             using var scope = scopeFactory.CreateScope();
-            var core = scope.ServiceProvider.GetRequiredService<IProgramCore>();
+            var core = scope.ServiceProvider.GetRequiredService<ICore>();
             var solutionUtils = scope.ServiceProvider.GetRequiredService<SolutionUtils>();
 
-            SystemUtils.Print(string.Format(TextStartup, solutionUtils.GetSolvers().Count));
-            SystemUtils.Print(TextHelp);
+            VisualHelpers.Print(string.Format(TextStartup, solutionUtils.GetSolvers().Count));
+            VisualHelpers.Print(TextHelp);
 
             while (!cancellationToken.IsCancellationRequested)
             {

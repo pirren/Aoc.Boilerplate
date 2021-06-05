@@ -12,13 +12,13 @@ namespace Aoc.Client.Services
 {
     public class RunnerService : WorkerBase
     {
-        private const string TextStartup = "Found {0} problems!\n\n";
+        private const string TextStartup = "Found {0} problems!";
         private const string TextHelp = "Following operations are available:\n" +
             "\n\t[number] run single" +
             "\n\t[a] run all" +
             "\n\t[c] create template" +
             "\n\t[l] list templates" +
-            "\n\t[ctrl+c] quit\n";
+            "\n\t[ctrl+c] quit";
 
         private readonly IServiceScopeFactory scopeFactory;
 
@@ -33,8 +33,8 @@ namespace Aoc.Client.Services
             var core = scope.ServiceProvider.GetRequiredService<ICore>();
             var solutionUtils = scope.ServiceProvider.GetRequiredService<SolutionUtils>();
 
-            VisualHelpers.Print(string.Format(TextStartup, solutionUtils.GetSolvers().Count));
-            VisualHelpers.Print(TextHelp);
+            VisualHelpers.Print(string.Format(TextStartup, solutionUtils.GetSolvers().Count), newLines: 2);
+            VisualHelpers.Print(TextHelp, newLines: 1);
 
             while (!cancellationToken.IsCancellationRequested)
             {
@@ -48,7 +48,7 @@ namespace Aoc.Client.Services
             {
                 Thread.Sleep(300); // wait for host to finish
                 Log.Information("Starting RunnerService");
-                Console.Write('\n');
+                VisualHelpers.Print(newLines: 1);
                 await RunAsync(cancellationToken);
             });
         }

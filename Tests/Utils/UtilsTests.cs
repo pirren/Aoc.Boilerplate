@@ -126,21 +126,21 @@ namespace Aoc.Tests.Utils
             Assert.True(utils.GenerateTemplate(1, "Testname").IsFailure);
         }
 
-        //[Fact]
-        //public void GenerateTemplate_BuiltSolutionReturnsSuccess()
-        //{
-        //    SolutionUtils utils = GetSolutionUtils();
-        //    int nonExistingDay = 2;
-        //    string indataUrl = Path.Combine(utils.GetTemplateFolderUrl(nonExistingDay), $"day-{nonExistingDay.TemplateNumberToPrint()}.in");
+        [Fact]
+        public void GenerateTemplate_BuiltSolutionReturnsSuccess()
+        {
+            SolutionUtils utils = GetSolutionUtils();
+            int nonExistingDay = 2;
+            string indataUrl = Path.Combine(utils.GetTemplateFolderUrl(nonExistingDay), $"day-{nonExistingDay.TemplateNumberToPrint()}.in");
 
-        //    Assert.True(utils.GenerateTemplate(nonExistingDay, "Testday").IsSuccess);
-        //    Assert.True(File.Exists(utils.GetTemplateUrl(nonExistingDay)));
-        //    Assert.True(File.Exists(indataUrl));
-            
-        //    // cleanup
-        //    File.Delete(utils.GetTemplateUrl(nonExistingDay));
-        //    File.Delete(indataUrl);
-        //}
+            Assert.True(utils.GenerateTemplate(nonExistingDay, "Testday").IsSuccess);
+            Assert.True(File.Exists(utils.GetTemplateUrl(nonExistingDay)));
+            Assert.True(File.Exists(indataUrl));
+
+            // cleanup
+            File.Delete(utils.GetTemplateUrl(nonExistingDay));
+            File.Delete(indataUrl);
+        }
         #endregion
     }
 }

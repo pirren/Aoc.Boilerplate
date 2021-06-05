@@ -10,7 +10,7 @@ namespace Aoc.Tests.Utils
         {
             var root = new ConfigurationBuilder().AddJsonFile("utils-test-config.json").Build();
             SolutionsRootFolder = root["SolutionsRootFolder"];
-            SolutionTestTemplate = root["TestTemplate"];
+            TemplateUrl = root["TemplateUrl"];
             if (!Directory.Exists(SolutionsRootFolder))
                 throw new Exception(
                     $"Test data folder {SolutionsRootFolder} not found. Current directory: {Directory.GetCurrentDirectory()}");
@@ -21,6 +21,6 @@ namespace Aoc.Tests.Utils
         }
 
         public string SolutionsRootFolder { get; }
-        public string SolutionTestTemplate { get; set; }
+        public string TemplateUrl { get; }
     }
 }

@@ -14,11 +14,11 @@ namespace Aoc.Client.Services
     {
         private const string TextStartup = "Found {0} problems!\n\n";
         private const string TextHelp = "Following operations are available:\n" +
-            "\n\t- [number] run single" +
-            "\n\t- [a] run all" +
-            "\n\t- [c] create template" +
-            "\n\t- [l] list templates" +
-            "\n\t- [ctrl+c] quit\n";
+            "\n\t[number] run single" +
+            "\n\t[a] run all" +
+            "\n\t[c] create template" +
+            "\n\t[l] list templates" +
+            "\n\t[ctrl+c] quit\n";
 
         private readonly IServiceScopeFactory scopeFactory;
 

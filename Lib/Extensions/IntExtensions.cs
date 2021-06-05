@@ -15,5 +15,7 @@ namespace Aoc.Lib.Extensions
             if (part == 2) return "Part Two: ";
             throw new System.Exception(string.Format("Undefined part choice: {0}", part));
         }
+
+        public static bool DayInRange(this int day) => day > 0 && day <= 24;
     }
 }

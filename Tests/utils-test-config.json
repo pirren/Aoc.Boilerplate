@@ -1,4 +1,4 @@
 ﻿{
-  "SolutionsRootFolder": "../../../Utils/TestData",
-  "TestTemplate": "footemplate{0}bar"
+  "SolutionsRootFolder": "..\\..\\..\\Utils\\TestData",
+  "TemplateUrl": "..\\..\\..\\Utils\\template-for-testing.txt"
 }

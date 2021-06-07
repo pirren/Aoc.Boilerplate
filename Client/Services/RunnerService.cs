@@ -31,7 +31,7 @@ namespace Aoc.Client.Services
         {
             using var scope = scopeFactory.CreateScope();
             var core = scope.ServiceProvider.GetRequiredService<ICore>();
-            var solutionUtils = scope.ServiceProvider.GetRequiredService<SolutionUtils>();
+            var solutionUtils = scope.ServiceProvider.GetRequiredService<SolverUtils>();
 
             VisualHelpers.Print(string.Format(TextStartup, solutionUtils.GetSolvers().Count), newLines: 2);
             VisualHelpers.Print(TextHelp, newLines: 1);

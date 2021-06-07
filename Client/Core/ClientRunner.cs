@@ -10,7 +10,7 @@ namespace Aoc.Client.Core
 {
     public class ClientRunner : ICore
     {
-        private readonly SolutionUtils solutionUtils;
+        private readonly SolverUtils solutionUtils;
 
         private const string InputOperationPrompt = "Enter operation: ";
         private const string InputProblemNamePrompt = "Enter problem name: ";
@@ -23,7 +23,7 @@ namespace Aoc.Client.Core
         public int NumProblems { get; private set; }
         public bool Running { get; private set; }
 
-        public ClientRunner(SolutionUtils solutionUtils)
+        public ClientRunner(SolverUtils solutionUtils)
         {
             this.solutionUtils = solutionUtils;
             NumProblems = solutionUtils.GetSolvers().Count;
@@ -67,13 +67,13 @@ namespace Aoc.Client.Core
             string problemName = problemResult.Value;
 
 
-            var result = solutionUtils.GenerateTemplate(problemDay, problemName);
+            var result = solutionUtils.GenerateSolver(problemDay, problemName);
             if (result.IsFailure)
             {
                 VisualHelpers.Print(result.Error, color: ConsoleColor.Red, newLines: 1);
                 return;
             }
-            Log.Information("Successfully generated template for day: {0}", problemDay.TemplateNumberToPrint());
+            Log.Information("Successfully generated template for day: {0}", problemDay.SolverNumberToPrint());
         }
 
         private void RunListTemplates()
@@ -95,7 +95,7 @@ namespace Aoc.Client.Core
 
         private void RunProblem(int choice, bool singleOrLastIteration = false)
         {
-            if (solutionUtils.TemplateExists(choice).IsFailure)
+            if (solutionUtils.SolverExists(choice).IsFailure)
             {
                 VisualHelpers.Print($"Problem number {choice} does not exist!", color: ConsoleColor.Red, newLines: 1);
                 return;
@@ -103,7 +103,7 @@ namespace Aoc.Client.Core
 
             VisualHelpers.Print(newLines: 1);
 
-            Type type = solutionUtils.GetSolvers(solutionUtils.GetTemplateShortName(choice)).First();
+            Type type = solutionUtils.GetSolvers(solutionUtils.GetSolverName(choice)).First();
             if (type == null) return;
 
             ISolver solver = (ISolver)Activator.CreateInstance(type);

@@ -64,7 +64,7 @@ namespace Aoc.Client
             {
                 services.AddSingleton<ICore, ClientRunner>();
                 services.AddSingleton<SystemConfig>();
-                services.AddSingleton<SolutionUtils>();
+                services.AddSingleton<SolverUtils>();
                 services.AddSingleton(_ => hostCtx.Configuration);
                 services.AddHostedService<RunnerService>();
             })

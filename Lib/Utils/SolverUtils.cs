@@ -9,7 +9,7 @@ using System.Reflection;
 
 namespace Aoc.Lib.Utils
 {
-    public class SolutionUtils
+    public class SolverUtils
     {
         private readonly SystemConfig systemConfig;
         private readonly Assembly[] assemblies;
@@ -18,7 +18,7 @@ namespace Aoc.Lib.Utils
 
         private const string indataFileNameFormat = "day-{0}.in";
 
-        public SolutionUtils(SystemConfig systemConfig)
+        public SolverUtils(SystemConfig systemConfig)
         {
             this.systemConfig = systemConfig;
             assemblies = AppDomain.CurrentDomain.GetAssemblies();
@@ -41,29 +41,29 @@ namespace Aoc.Lib.Utils
             return query.ToList();
         }
 
-        public Result GenerateTemplate(int day, string problemName)
+        public Result GenerateSolver(int day, string problemName)
         {
             var eval = EvaluateGenerationRequest(day);
             if (eval.IsFailure) return eval;
 
-            var templateFolderUrl = GetTemplateFolderUrl(day);
-            var fullUrl = GetTemplateUrl(day);
+            var solverFolderUrl = GetSolverFolderFullUrl(day);
+            var fullUrl = GetFullSolverUrl(day);
 
-            Directory.CreateDirectory(templateFolderUrl);
+            Directory.CreateDirectory(solverFolderUrl);
             try
             {
                 using StreamWriter fileWriter = File.CreateText(fullUrl);
                 var templateBase = systemConfig.TemplateBase;
                 foreach (var line in templateBase)
-                    fileWriter.WriteLine(line.Replace("{0}", GetTemplateShortName(day)).Replace("{1}", problemName).Replace("{2}", day.TemplateNumberToPrint()));
+                    fileWriter.WriteLine(line.Replace("{0}", GetSolverName(day)).Replace("{1}", problemName).Replace("{2}", day.SolverNumberToPrint()));
                 fileWriter.Close();
 
-                string fullIndataUrl = Path.Combine(templateFolderUrl, string.Format(indataFileNameFormat, day.TemplateNumberToPrint()));
+                string fullIndataUrl = Path.Combine(solverFolderUrl, string.Format(indataFileNameFormat, day.SolverNumberToPrint()));
                 using StreamWriter indataWriter = File.CreateText(fullIndataUrl);
             }
             catch (Exception e)
             {
-                return Result.Fail(string.Format("Caught error trying to generate template {0}: {1}", GetTemplateShortName(day), e));
+                return Result.Fail(string.Format("Caught error trying to generate template {0}: {1}", GetSolverName(day), e));
             }
 
             return Result.Ok(fullUrl);
@@ -72,41 +72,59 @@ namespace Aoc.Lib.Utils
         private Result EvaluateGenerationRequest(int day)
         {
             if(!day.DayInRange()) return Result.Fail(string.Format("Valid Solutions are 1-24. Entered: {0}", day));
-            if (TemplateExists(day).IsSuccess) return Result.Fail(string.Format("Solution for day {0} already exists", day));
+            if (SolverExists(day).IsSuccess) return Result.Fail(string.Format("Solution for day {0} already exists", day));
             return Result.Ok();
         }
 
-        public Result TemplateExists(int day)
+        /// <summary>
+        /// Get whether the Solver already exists
+        /// </summary>
+        /// <param name="day"></param>
+        /// <returns>Result</returns>
+        public Result SolverExists(int day)
         {
             if (!day.DayInRange()) return Result.Fail("Day not in range!");
-            return File.Exists(GetTemplateUrl(day)) ? Result.Ok() : Result.Fail("Solution does not exist");
+            return File.Exists(GetFullSolverUrl(day)) ? Result.Ok() : Result.Fail("Solution does not exist");
         }
 
-        public string GetTemplateShortName(int day)
+        /// <summary>
+        /// Get name of solver e.g. Day01
+        /// </summary>
+        /// <param name="day"></param>
+        /// <returns>Name of Solver</returns>
+        public string GetSolverName(int day)
+            => $"Day{day.SolverNumberToPrint()}";
+
+        private string GetSolverFileName(int day)
         {
-            return $"Day{day.TemplateNumberToPrint()}";
+            return $"{GetSolverName(day)}.cs";
         }
 
-        private string GetTemplateFileName(int day)
+        private string GetSolverFolder(int day)
         {
-            return $"{GetTemplateShortName(day)}.cs";
+            return GetSolverName(day);
         }
 
-        private string GetSolutionTemplateFolderName(int day)
-        {
-            return GetTemplateShortName(day);
-        }
-
-        public string GetTemplateFolderUrl(int day)
+        /// <summary>
+        /// Get the url to Solver's folder
+        /// </summary>
+        /// <param name="day"></param>
+        /// <returns>Solver's folder url</returns>
+        public string GetSolverFolderFullUrl(int day)
         {
             if (!day.DayInRange()) return string.Empty;
-            return Path.Combine(systemConfig.SolutionsBasePath, GetTemplateShortName(day));
+            return Path.Combine(systemConfig.SolutionsBasePath, GetSolverName(day));
         }
 
-        public string GetTemplateUrl(int day)
+        /// <summary>
+        /// Get the full url to Solver
+        /// </summary>
+        /// <param name="day"></param>
+        /// <returns>Full url to Solver</returns>
+        public string GetFullSolverUrl(int day)
         {
             if (!day.DayInRange()) return string.Empty;
-            return Path.Combine(systemConfig.SolutionsBasePath, GetSolutionTemplateFolderName(day), GetTemplateFileName(day));
+            return Path.Combine(systemConfig.SolutionsBasePath, GetSolverFolder(day), GetSolverFileName(day));
         }
     }
 }

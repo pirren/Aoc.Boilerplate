@@ -15,13 +15,13 @@ namespace Aoc.Tests.Utils
             this.fixture = fixture;
         }
 
-        private SolutionUtils GetSolutionUtils()
+        private SolverUtils GetSolutionUtils()
         {
             var mockConfig = new Mock<SystemConfig>();
             mockConfig.Setup(x => x.SolutionsBasePath).Returns(fixture.SolutionsRootFolder);
             mockConfig.Setup(x => x.TemplateBase).Returns(new string[] { File.ReadAllText(fixture.TemplateUrl) });
 
-            var utils = new SolutionUtils(mockConfig.Object)
+            var utils = new SolverUtils(mockConfig.Object)
             {
                 SolutionsNamespace = "Aoc.Test.Solutions"
             };
@@ -34,9 +34,9 @@ namespace Aoc.Tests.Utils
         {
             var utils = GetSolutionUtils();
             int day = 20;
-            var res = utils.GetTemplateUrl(day);
+            var res = utils.GetFullSolverUrl(day);
 
-            Assert.True(utils.GetTemplateUrl(day).Length > 0);
+            Assert.True(utils.GetFullSolverUrl(day).Length > 0);
         }
 
         [Fact]
@@ -45,7 +45,7 @@ namespace Aoc.Tests.Utils
             var utils = GetSolutionUtils();
             int day = 25;
 
-            Assert.True(utils.GetTemplateUrl(day) == string.Empty);
+            Assert.True(utils.GetFullSolverUrl(day) == string.Empty);
         }
 
         [Fact]
@@ -54,7 +54,7 @@ namespace Aoc.Tests.Utils
             var utils = GetSolutionUtils();
             int day = 20;
 
-            Assert.True(utils.GetTemplateFolderUrl(day).Length > 0);
+            Assert.True(utils.GetSolverFolderFullUrl(day).Length > 0);
         }
 
         [Fact]
@@ -62,7 +62,7 @@ namespace Aoc.Tests.Utils
         {
             var utils = GetSolutionUtils();
             int day = 25;
-            Assert.True(utils.GetTemplateFolderUrl(day) == string.Empty);
+            Assert.True(utils.GetSolverFolderFullUrl(day) == string.Empty);
         }
 
         [Fact]
@@ -70,7 +70,7 @@ namespace Aoc.Tests.Utils
         {
             var utils = GetSolutionUtils();
 
-            var actual = utils.GetTemplateShortName(1);
+            var actual = utils.GetSolverName(1);
             string expected = "Day01";
 
             Assert.True(expected == actual);
@@ -80,7 +80,7 @@ namespace Aoc.Tests.Utils
         public void TemplateExists_ExistingSolverExists()
         {
             var utils = GetSolutionUtils();
-            var result = utils.TemplateExists(1);
+            var result = utils.SolverExists(1);
 
             Assert.True(result.IsSuccess);
         }
@@ -89,7 +89,7 @@ namespace Aoc.Tests.Utils
         public void TemplateExists_BadRequestIsFailure()
         {
             var utils = GetSolutionUtils();
-            var result = utils.TemplateExists(5);
+            var result = utils.SolverExists(5);
 
             Assert.True(result.IsFailure);
         }
@@ -121,23 +121,23 @@ namespace Aoc.Tests.Utils
         [Fact]
         public void GenerateTemplate_SolutionExistsReturnsFails()
         {
-            SolutionUtils utils = GetSolutionUtils();
-            Assert.True(utils.GenerateTemplate(1, "Testname").IsFailure);
+            SolverUtils utils = GetSolutionUtils();
+            Assert.True(utils.GenerateSolver(1, "Testname").IsFailure);
         }
 
         [Fact]
         public void GenerateTemplate_BuiltSolutionReturnsSuccess()
         {
-            SolutionUtils utils = GetSolutionUtils();
+            SolverUtils utils = GetSolutionUtils();
             int nonExistingDay = 2;
-            string indataUrl = Path.Combine(utils.GetTemplateFolderUrl(nonExistingDay), $"day-{nonExistingDay.TemplateNumberToPrint()}.in");
+            string indataUrl = Path.Combine(utils.GetSolverFolderFullUrl(nonExistingDay), $"day-{nonExistingDay.SolverNumberToPrint()}.in");
 
-            Assert.True(utils.GenerateTemplate(nonExistingDay, "Testday").IsSuccess);
-            Assert.True(File.Exists(utils.GetTemplateUrl(nonExistingDay)));
+            Assert.True(utils.GenerateSolver(nonExistingDay, "Testday").IsSuccess);
+            Assert.True(File.Exists(utils.GetFullSolverUrl(nonExistingDay)));
             Assert.True(File.Exists(indataUrl));
 
             // cleanup
-            File.Delete(utils.GetTemplateUrl(nonExistingDay));
+            File.Delete(utils.GetFullSolverUrl(nonExistingDay));
             File.Delete(indataUrl);
         }
         #endregion

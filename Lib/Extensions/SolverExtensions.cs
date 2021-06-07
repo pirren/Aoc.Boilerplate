@@ -12,13 +12,6 @@ namespace Aoc.Lib.Extensions
         /// <param name="solver">ISolver</param>
         /// <returns>Problem</returns>
         public static Problem GetProblemInfo(this ISolver solver)
-        {
-            return (Problem)System.Attribute.GetCustomAttributes(solver.GetType()).First();
-        }
-
-        public class SolutionException : ApplicationException
-        {
-            public SolutionException(string message) : base(message) { }
-        }
+            => (Problem)System.Attribute.GetCustomAttributes(solver.GetType()).First();
     }
 }

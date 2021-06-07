@@ -28,7 +28,7 @@ namespace Aoc.Tests.Extensions
         {
             int number = 5;
             string expected = $"0{number}";
-            Assert.Equal(expected, number.TemplateNumberToPrint());
+            Assert.Equal(expected, number.SolverNumberToPrint());
         }
 
         [Fact]
@@ -36,14 +36,14 @@ namespace Aoc.Tests.Extensions
         {
             int number = 20;
             string expected = number.ToString();
-            Assert.Equal(expected, number.TemplateNumberToPrint());
+            Assert.Equal(expected, number.SolverNumberToPrint());
         }
 
         [Fact]
         public void TemplateNumberToPrint_ReturnsString()
         {
             int testValue = 5;
-            Assert.IsType<string>(testValue.TemplateNumberToPrint());
+            Assert.IsType<string>(testValue.SolverNumberToPrint());
         }
 
         [Fact]
